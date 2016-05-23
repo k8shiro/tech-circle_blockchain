@@ -102,6 +102,6 @@ func (t *SimpleChaincode) Query(stub *shim.ChaincodeStub, function string, args 
         return nil, errors.New(jsonResp)
     }
     
-    message :=Avalbytes)
+    message =Avalbytes
     return  []byte(message), nil
 }
