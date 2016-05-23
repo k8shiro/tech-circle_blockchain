@@ -27,8 +27,8 @@ func main() {
 }
 
 func (t *SimpleChaincode) Init(stub *shim.ChaincodeStub, function string, args []string) ([]byte, error) {
-    var A string // user
-    var Aval int //
+    var A string
+    var Aval int
     var err error
     
     if len(args) != 2 {
@@ -53,9 +53,8 @@ func (t *SimpleChaincode) Init(stub *shim.ChaincodeStub, function string, args [
     
     
     
-//
 func (t *SimpleChaincode) Invoke(stub *shim.ChaincodeStub, function string, args []string) ([]byte, error) {
-    var A string    //
+    var A string
     var Aval int
     var err error
     
@@ -78,13 +77,12 @@ func (t *SimpleChaincode) Invoke(stub *shim.ChaincodeStub, function string, args
         return nil, nil
 }
 
-    
-//
+
 func (t *SimpleChaincode) Query(stub *shim.ChaincodeStub, function string, args []string) ([]byte, error) {
     if function != "query" {
         return nil, errors.New("Invalid query function name. Expecting \"query\"")
     }
-    var A string //
+    var A string
     var err error
     
     if len(args) != 1 {
@@ -93,7 +91,6 @@ func (t *SimpleChaincode) Query(stub *shim.ChaincodeStub, function string, args 
     
     A = args[0]
     
-    //
     Avalbytes, err := stub.GetState(A)
     if err != nil {
         jsonResp := "{\"Error\":\"Failed to get state for " + A + "\"}"
@@ -106,5 +103,5 @@ func (t *SimpleChaincode) Query(stub *shim.ChaincodeStub, function string, args 
     }
     
     message := "Name:" + A + ", Amount:" + string(Avalbytes) + "}"
-    return  []byte(jsonResp), nil
+    return  []byte(message), nil
 }
