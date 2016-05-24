@@ -1,6 +1,5 @@
 /*
  https://github.com/IBM-Blockchain/marbles-chaincode/blob/master/hyperledger/part2/part2_chaincode.go
- を元に改変
  */
 
 package main
@@ -17,8 +16,8 @@ type SimpleChaincode struct {
 }
 
 func (t *SimpleChaincode) Init(stub *shim.ChaincodeStub, function string, args []string) ([]byte, error) {
-    var A string    // ユーザ
-    var Aval int // 値
+    var A string
+    var Aval int
     var err error
     
     if len(args) != 2 {
@@ -33,7 +32,6 @@ func (t *SimpleChaincode) Init(stub *shim.ChaincodeStub, function string, args [
     
     fmt.Printf("Aval = %d,\n", Aval)
     
-    // ブロックチェーンへの書き込み
     err = stub.PutState(A, []byte(strconv.Itoa(Aval)))
     if err != nil {
         return nil, err
@@ -43,9 +41,8 @@ func (t *SimpleChaincode) Init(stub *shim.ChaincodeStub, function string, args [
 
 
 
-// 単純な値の書き換え
 func (t *SimpleChaincode) Invoke(stub *shim.ChaincodeStub, function string, args []string) ([]byte, error) {
-    var A string    // ユーザ
+    var A string
     var Aval int
     var err error
     
@@ -59,7 +56,7 @@ func (t *SimpleChaincode) Invoke(stub *shim.ChaincodeStub, function string, args
         return nil, errors.New("Expecting integer value for asset holding")
     }
     
-    // ブロックチェーン上の値の書き換え
+    
     err = stub.PutState(A, []byte(strconv.Itoa(Aval)))
     if err != nil {
         return nil, err
@@ -69,12 +66,11 @@ func (t *SimpleChaincode) Invoke(stub *shim.ChaincodeStub, function string, args
 }
 
 
-// 値の取得
 func (t *SimpleChaincode) Query(stub *shim.ChaincodeStub, function string, args []string) ([]byte, error) {
     if function != "query" {
         return nil, errors.New("Invalid query function name. Expecting \"query\"")
     }
-    var A string // ユーザ
+    var A string
     var err error
     
     if len(args) != 1 {
@@ -83,7 +79,7 @@ func (t *SimpleChaincode) Query(stub *shim.ChaincodeStub, function string, args 
     
     A = args[0]
     
-    // ブロックチェーン上のユーザの値の取得
+
     Avalbytes, err := stub.GetState(A)
     if err != nil {
         jsonResp := "{\"Error\":\"Failed to get state for " + A + "\"}"
@@ -96,7 +92,7 @@ func (t *SimpleChaincode) Query(stub *shim.ChaincodeStub, function string, args 
     }
     
     message := "Name:" + A + ", Amount:" + string(Avalbytes) + "}"
-    return  []byte(jsonResp), nil
+    return  []byte(message), nil
 }
 
 
