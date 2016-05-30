@@ -51,33 +51,8 @@ func (t *SimpleChaincode1) Invoke(stub *shim.ChaincodeStub, function string, arg
 
 // Query callback representing the query of a chaincode
 func (t *SimpleChaincode1) Query(stub *shim.ChaincodeStub, function string, args []string) ([]byte, error) {
-    if function != "query" {
-        return nil, errors.New("Invalid query function name. Expecting \"query\"")
-    }
-    var itemID string // Entities
-    var err error
-    
-    if len(args) != 1 {
-        return nil, errors.New("Incorrect number of arguments. Expecting name of the person to query")
-    }
-    
-    itemID = args[0]
-    
-    // Get the state from the ledger
-    itembytes, err := stub.GetState(itemID)
-    if err != nil {
-        jsonResp := "{\"Error\":\"Failed to get state for " + itemID + "\"}"
-        return nil, errors.New(jsonResp)
-    }
-    
-    if itembytes == nil {
-        jsonResp := "{\"Error\":\"Nil amount for " + itemID + "\"}"
-        return nil, errors.New(jsonResp)
-    }
-    
-    jsonResp := "{\"Name\":\"" + itemID + "\",\"Amount\":\"" + string(itembytes) + "\"}"
-    fmt.Printf("Query Response:%s\n", jsonResp)
-    return itembytes, nil
+
+    return []byte("OK"), nil
 }
 
 func main() {
