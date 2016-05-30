@@ -16,7 +16,7 @@ func (t *SimpleChaincode) Init(stub *shim.ChaincodeStub, function string, args [
     var Aval, Bval int // Asset holdings
     var err error
     
-    if len(args) != 4 {
+    if len(args) != 2 {
         return nil, errors.New("Incorrect number of arguments. Expecting 4")
     }
     
@@ -44,7 +44,7 @@ func (t *SimpleChaincode) Invoke(stub *shim.ChaincodeStub, function string, args
     var Aval, Bval int // Asset holdings
     var err error
     
-    if len(args) != 4 {
+    if len(args) != 2 {
         return nil, errors.New("Incorrect number of arguments. Expecting 4")
     }
     
