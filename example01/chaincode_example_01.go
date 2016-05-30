@@ -48,12 +48,12 @@ func (t *SimpleChaincode) Invoke(stub *shim.ChaincodeStub, function string, args
     if err != nil {
         return nil, err
     }
-    
+    /*
     err = stub.PutState(B, []byte(strconv.Itoa(Bval)))
     if err != nil {
         return nil, err
     }
-    
+    */
     return nil, nil
 }
 
