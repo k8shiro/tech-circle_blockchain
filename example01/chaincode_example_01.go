@@ -11,8 +11,8 @@ type SimpleChaincode struct {
 }
 
 func (t *SimpleChaincode) Init(stub *shim.ChaincodeStub, function string, args []string) ([]byte, error) {
-    var id string    // 管理番号
-    var item string // 品物
+    var id string
+    var item string
     var err error
     
     if len(args) != 2 {
@@ -32,8 +32,8 @@ func (t *SimpleChaincode) Init(stub *shim.ChaincodeStub, function string, args [
 }
 
 func (t *SimpleChaincode) Invoke(stub *shim.ChaincodeStub, function string, args []string) ([]byte, error) {
-    var id string    // 管理番号
-    var item string // 品物
+    var id string
+    var item string
     var err error
     
     
