@@ -9,10 +9,10 @@ import (
         )
 
 // SimpleChaincode example simple Chaincode implementation
-type SimpleChaincode struct {
+type SimpleChaincode1 struct {
 }
 
-func (t *SimpleChaincode) Init(stub *shim.ChaincodeStub, function string, args []string) ([]byte, error) {
+func (t *SimpleChaincode1) Init(stub *shim.ChaincodeStub, function string, args []string) ([]byte, error) {
     if len(args) != 0 {
         return nil, errors.New("Incorrect number of arguments. Expecting 0")
     }
@@ -21,12 +21,12 @@ func (t *SimpleChaincode) Init(stub *shim.ChaincodeStub, function string, args [
 }
 
 // Transaction makes payment of X units from A to B
-func (t *SimpleChaincode) Invoke(stub *shim.ChaincodeStub, function string, args []string) ([]byte, error) {
-    var A, B string    // Entities
-    var Aval, Bval int // Asset holdings
+func (t *SimpleChaincode1) Invoke(stub *shim.ChaincodeStub, function string, args []string) ([]byte, error) {
+    var A string    // Entities
+    var Aval int // Asset holdings
     var err error
     
-    if len(args) != 4 {
+    if len(args) != 2 {
         return nil, errors.New("Incorrect number of arguments. Expecting 4")
     }
     
@@ -36,12 +36,7 @@ func (t *SimpleChaincode) Invoke(stub *shim.ChaincodeStub, function string, args
     if err != nil {
         return nil, errors.New("Expecting integer value for asset holding")
     }
-    B = args[2]
-    Bval, err = strconv.Atoi(args[3])
-    if err != nil {
-        return nil, errors.New("Expecting integer value for asset holding")
-    }
-    fmt.Printf("Aval = %d, Bval = %d\n", Aval, Bval)
+    
     
     // Write the state to the ledger
     err = stub.PutState(A, []byte(strconv.Itoa(Aval)))
@@ -49,14 +44,13 @@ func (t *SimpleChaincode) Invoke(stub *shim.ChaincodeStub, function string, args
         return nil, err
     }
     
-
     
     return nil, nil
 }
 
 
 // Query callback representing the query of a chaincode
-func (t *SimpleChaincode) Query(stub *shim.ChaincodeStub, function string, args []string) ([]byte, error) {
+func (t *SimpleChaincode1) Query(stub *shim.ChaincodeStub, function string, args []string) ([]byte, error) {
     if function != "query" {
         return nil, errors.New("Invalid query function name. Expecting \"query\"")
     }
