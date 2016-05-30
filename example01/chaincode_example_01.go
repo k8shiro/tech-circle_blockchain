@@ -16,7 +16,7 @@ func (t *SimpleChaincode) Init(stub *shim.ChaincodeStub, function string, args [
     var Aval, Bval int // Asset holdings
     var err error
     
-    if len(args) != 2 {
+    if len(args) != 4 {
         return nil, errors.New("Incorrect number of arguments. Expecting 4")
     }
     
@@ -26,7 +26,12 @@ func (t *SimpleChaincode) Init(stub *shim.ChaincodeStub, function string, args [
     if err != nil {
         return nil, errors.New("Expecting integer value for asset holding")
     }
-        fmt.Printf("Aval = %d, Bval = %d\n", Aval, Bval)
+    B = args[2]
+    Bval, err = strconv.Atoi(args[3])
+    if err != nil {
+        return nil, errors.New("Expecting integer value for asset holding")
+    }
+    fmt.Printf("Aval = %d, Bval = %d\n", Aval, Bval)
     
     // Write the state to the ledger
     err = stub.PutState(A, []byte(strconv.Itoa(Aval)))
@@ -34,7 +39,10 @@ func (t *SimpleChaincode) Init(stub *shim.ChaincodeStub, function string, args [
         return nil, err
     }
     
-    
+    err = stub.PutState(B, []byte(strconv.Itoa(Bval)))
+    if err != nil {
+        return nil, err
+    }
     
     return nil, nil
 }
@@ -44,7 +52,7 @@ func (t *SimpleChaincode) Invoke(stub *shim.ChaincodeStub, function string, args
     var Aval, Bval int // Asset holdings
     var err error
     
-    if len(args) != 2 {
+    if len(args) != 4 {
         return nil, errors.New("Incorrect number of arguments. Expecting 4")
     }
     
@@ -54,7 +62,11 @@ func (t *SimpleChaincode) Invoke(stub *shim.ChaincodeStub, function string, args
     if err != nil {
         return nil, errors.New("Expecting integer value for asset holding")
     }
-    
+    B = args[2]
+    Bval, err = strconv.Atoi(args[3])
+    if err != nil {
+        return nil, errors.New("Expecting integer value for asset holding")
+    }
     fmt.Printf("Aval = %d, Bval = %d\n", Aval, Bval)
     
     // Write the state to the ledger
@@ -63,7 +75,10 @@ func (t *SimpleChaincode) Invoke(stub *shim.ChaincodeStub, function string, args
         return nil, err
     }
     
-    
+    err = stub.PutState(B, []byte(strconv.Itoa(Bval)))
+    if err != nil {
+        return nil, err
+    }
     
     return nil, nil
 }
