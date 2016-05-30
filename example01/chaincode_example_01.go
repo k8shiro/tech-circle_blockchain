@@ -37,7 +37,6 @@ func (t *SimpleChaincode) Invoke(stub *shim.ChaincodeStub, function string, args
     var err error
     
     
-    
     if len(args) != 2 {
         return nil, errors.New("Incorrect number of arguments. Expecting 2")
     }
@@ -78,8 +77,6 @@ func (t *SimpleChaincode) Query(stub *shim.ChaincodeStub, function string, args 
         return nil, errors.New(jsonResp)
     }
     
-    jsonResp := "{\"Name\":\"" + id + "\",\"Amount\":\"" + string(itemBytes) + "\"}"
-    fmt.Printf("Query Response:%s\n", jsonResp)
     return itemBytes, nil
 }
 
