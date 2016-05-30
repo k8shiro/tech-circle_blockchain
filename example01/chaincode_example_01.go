@@ -1,129 +1,91 @@
-/*
- https://github.com/IBM-Blockchain/marbles-chaincode/blob/master/hyperledger/part2/part2_chaincode.go
- */
-
 package main
 
 import (
         "errors"
         "fmt"
         "strconv"
-        "encoding/json"
         "github.com/hyperledger/fabric/core/chaincode/shim"
         )
-
 
 type SimpleChaincode struct {
 }
 
-
-
-type User struct {
-    Name string
-    Age  int
-}
-
-
-
 func (t *SimpleChaincode) Init(stub *shim.ChaincodeStub, function string, args []string) ([]byte, error) {
-    var A string
-    var Aval User
+    var id string    // 管理番号
+    var item string // 品物
     var err error
     
-    if len(args) != 3 {
-        return nil, errors.New("Incorrect number of arguments. Expecting 3")
+    if len(args) != 2 {
+        return nil, errors.New("Incorrect number of arguments. Expecting 4")
     }
     
-    A = args[0]
-    Aval.Name = args[1]
-    Aval.Age, err = strconv.Atoi(args[2])
+    id = args[0]
+    item = args[1]
     if err != nil {
         return nil, errors.New("Expecting integer value for asset holding")
     }
     
-    Avalbytes, err := json.Marshal(Aval)
-    if err != nil {
-        return nil, errors.New("err")
-    }
+    fmt.Printf("id = %d,\n", id)
     
-    err = stub.PutState(A, Avalbytes)
+    err = stub.PutState(id, []byte(item))
     if err != nil {
         return nil, err
     }
     return nil, nil
 }
-
-
 
 func (t *SimpleChaincode) Invoke(stub *shim.ChaincodeStub, function string, args []string) ([]byte, error) {
-    var A string
-    var Aval User
+    var id string    // 管理番号
+    var item string // 品物
     var err error
     
-    if len(args) != 3 {
-        return nil, errors.New("Incorrect number of arguments. Expecting 3")
+    
+    
+    if len(args) != 2 {
+        return nil, errors.New("Incorrect number of arguments. Expecting 2")
     }
     
-    A = args[0]
-    Aval.Name = args[1]
-    Aval.Age, err = strconv.Atoi(args[2])
-    if err != nil {
-        return nil, errors.New("Expecting integer value for asset holding")
-    }
+    id = args[0]
+    item = args[1]
     
-    Avalbytes, err := json.Marshal(Aval)
-    if err != nil {
-        return nil, errors.New("err")
-    }
-    
-    
-    err = stub.PutState(A, Avalbytes)
+    err = stub.PutState(id, []byte(item))
     if err != nil {
         return nil, err
     }
-    
     return nil, nil
 }
 
 
-
+// Query callback representing the query of a chaincode
 func (t *SimpleChaincode) Query(stub *shim.ChaincodeStub, function string, args []string) ([]byte, error) {
     if function != "query" {
         return nil, errors.New("Invalid query function name. Expecting \"query\"")
     }
-    
-    var A string
-    var Aval User
+    var id string // Entities
     var err error
     
     if len(args) != 1 {
         return nil, errors.New("Incorrect number of arguments. Expecting name of the person to query")
     }
     
-    A = args[0]
+    id = args[0]
     
-    
-    Avalbytes, err := stub.GetState(A)
+    // Get the state from the ledger
+    itemBytes, err := stub.GetState(id)
     if err != nil {
-        jsonResp := "{\"Error\":\"Failed to get state for " + A + "\"}"
+        jsonResp := "{\"Error\":\"Failed to get state for " + id + "\"}"
         return nil, errors.New(jsonResp)
     }
     
-    if Avalbytes == nil {
-        jsonResp := "{\"Error\":\"Nil amount for " + A + "\"}"
+    if itemBytes == nil {
+        jsonResp := "{\"Error\":\"Nil amount for " + id + "\"}"
         return nil, errors.New(jsonResp)
     }
     
-    err = json.Unmarshal(Avalbytes, &Aval)
-    if err != nil {
-        fmt.Errorf("%s", err)
-    }
-    
-    
-    message := "ID:" + A + ", Name:" + Aval.Name + ", Age:"+ strconv.Itoa(Aval.Age) +"}"
-    return  []byte(message), nil
+    jsonResp := "{\"Name\":\"" + A + "\",\"Amount\":\"" + string(itemBytes) + "\"}"
+    fmt.Printf("Query Response:%s\n", jsonResp)
+    return itemBytes, nil
 }
-
 
 func main() {
     err := shim.Start(new(SimpleChaincode))
