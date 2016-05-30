@@ -22,8 +22,8 @@ func (t *ChaincodeExample01) Init(stub *shim.ChaincodeStub, function string, arg
 
 // Transaction makes payment of X units from A to B
 func (t *ChaincodeExample01) Invoke(stub *shim.ChaincodeStub, function string, args []string) ([]byte, error) {
-    var itemId string    // Entities
-    var itemName string // Asset holdings
+    var itemId, itemName string    // Entities
+    //var itemName string // Asset holdings
     var err error
     
     if len(args) != 2 {
