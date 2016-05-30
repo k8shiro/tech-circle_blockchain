@@ -73,13 +73,14 @@ func (t *SimpleChaincode) Query(stub *shim.ChaincodeStub, function string, args 
     }
     var id string
     var err error
+    var temperatureBytes
     
     if len(args) != 1 {
         return nil, errors.New("Incorrect number of arguments. Expecting name of the person to query")
     }
     
     id = args[0]
-    temperatureBytes, err := stub.GetState(id)
+    temperatureBytes, err = stub.GetState(id)
     if err != nil {
         return nil, err
     }
