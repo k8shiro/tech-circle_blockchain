@@ -12,8 +12,8 @@ type SimpleChaincode struct {
 }
 
 func (t *SimpleChaincode) Init(stub *shim.ChaincodeStub, function string, args []string) ([]byte, error) {
-    var itemId string
-    var itemName string
+    var ItemId string
+    var ItemName string
     var err error
     
     if len(args) != 2 {
@@ -23,7 +23,7 @@ func (t *SimpleChaincode) Init(stub *shim.ChaincodeStub, function string, args [
     itemId = args[0]
     item = args[1]
     
-    err = stub.PutState(itemId, []byte(itemName))
+    err = stub.PutState(ItemId, []byte(ItemName))
     if err != nil {
         return nil, err
     }
@@ -32,8 +32,8 @@ func (t *SimpleChaincode) Init(stub *shim.ChaincodeStub, function string, args [
 }
 
 func (t *SimpleChaincode) Invoke(stub *shim.ChaincodeStub, function string, args []string) ([]byte, error) {
-    var itemId string
-    var itemName string
+    var ItemId string
+    var ItemName string
     var err error
     
     if len(args) != 2 {
@@ -43,7 +43,7 @@ func (t *SimpleChaincode) Invoke(stub *shim.ChaincodeStub, function string, args
     itemId = args[0]
     item = args[1]
     
-    err = stub.PutState(itemId, []byte(itemName))
+    err = stub.PutState(ItemId, []byte(ItemName))
     if err != nil {
         return nil, err
     }
