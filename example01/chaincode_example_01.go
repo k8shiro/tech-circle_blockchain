@@ -13,7 +13,7 @@ type SimpleChaincode struct {
 }
 
 func (t *SimpleChaincode) Init(stub *shim.ChaincodeStub, function string, args []string) ([]byte, error) {
-    var A, B string    // Entities
+    /*var A, B string    // Entities
     var Aval, Bval int // Asset holdings
     var err error
     
@@ -43,6 +43,10 @@ func (t *SimpleChaincode) Init(stub *shim.ChaincodeStub, function string, args [
     err = stub.PutState(B, []byte(strconv.Itoa(Bval)))
     if err != nil {
         return nil, err
+    }
+    */
+    if len(args) != 0 {
+        return nil, errors.New("Incorrect number of arguments. Expecting 0")
     }
     
     return nil, nil
