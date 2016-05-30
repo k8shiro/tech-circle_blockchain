@@ -9,10 +9,10 @@ import (
         )
 
 // SimpleChaincode example simple Chaincode implementation
-type SimpleChaincode1 struct {
+type ChaincodeExample01 struct {
 }
 
-func (t *SimpleChaincode1) Init(stub *shim.ChaincodeStub, function string, args []string) ([]byte, error) {
+func (t *ChaincodeExample01) Init(stub *shim.ChaincodeStub, function string, args []string) ([]byte, error) {
     if len(args) != 0 {
         return nil, errors.New("Incorrect number of arguments. Expecting 0")
     }
@@ -21,7 +21,7 @@ func (t *SimpleChaincode1) Init(stub *shim.ChaincodeStub, function string, args 
 }
 
 // Transaction makes payment of X units from A to B
-func (t *SimpleChaincode1) Invoke(stub *shim.ChaincodeStub, function string, args []string) ([]byte, error) {
+func (t *ChaincodeExample01) Invoke(stub *shim.ChaincodeStub, function string, args []string) ([]byte, error) {
     var itemId string    // Entities
     var itemName string // Asset holdings
     var err error
@@ -50,7 +50,7 @@ func (t *SimpleChaincode1) Invoke(stub *shim.ChaincodeStub, function string, arg
 
 
 // Query callback representing the query of a chaincode
-func (t *SimpleChaincode1) Query(stub *shim.ChaincodeStub, function string, args []string) ([]byte, error) {
+func (t *ChaincodeExample01) Query(stub *shim.ChaincodeStub, function string, args []string) ([]byte, error) {
     if function != "query" {
         return nil, errors.New("Invalid query function name. Expecting \"query\"")
     }
@@ -81,7 +81,7 @@ func (t *SimpleChaincode1) Query(stub *shim.ChaincodeStub, function string, args
 }
 
 func main() {
-    err := shim.Start(new(SimpleChaincode1))
+    err := shim.Start(new(ChaincodeExample01))
     if err != nil {
         fmt.Printf("Error starting Simple chaincode: %s", err)
     }
