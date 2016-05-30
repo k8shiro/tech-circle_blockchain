@@ -21,9 +21,6 @@ func (t *SimpleChaincode) Init(stub *shim.ChaincodeStub, function string, args [
     
     id = args[0]
     item = args[1]
-    if err != nil {
-        return nil, errors.New("Expecting integer value for asset holding")
-    }
     
     fmt.Printf("id = %d,\n", id)
     
@@ -52,11 +49,11 @@ func (t *SimpleChaincode) Invoke(stub *shim.ChaincodeStub, function string, args
     if err != nil {
         return nil, err
     }
+    
     return nil, nil
 }
 
 
-// Query callback representing the query of a chaincode
 func (t *SimpleChaincode) Query(stub *shim.ChaincodeStub, function string, args []string) ([]byte, error) {
     if function != "query" {
         return nil, errors.New("Invalid query function name. Expecting \"query\"")
