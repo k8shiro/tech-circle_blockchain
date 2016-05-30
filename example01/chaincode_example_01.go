@@ -28,14 +28,14 @@ func (t *SimpleChaincode) Init(stub *shim.ChaincodeStub, function string, args [
     id = args[0]
     temperature, err = strconv.Atoi(args[1])
     if err != nil {
-        return nil, errors.New("Expecting integer value for asset holding")
+        return nil, err
     }
     
     fmt.Printf("temperature = %d,\n", temperature)
     
     err = stub.PutState(id, []byte(strconv.Itoa(temperature)))
     if err != nil {
-        return nil, errors.New("Expecting integer value for asset holding")
+        return nil, err
     }
 
     return nil, nil
@@ -55,12 +55,12 @@ func (t *SimpleChaincode) Invoke(stub *shim.ChaincodeStub, function string, args
     id = args[0]
     temperature, err = strconv.Atoi(args[1])
     if err != nil {
-        return nil, errors.New("Expecting integer value for asset holding")
+        return nil, err
     }
     
     err = stub.PutState(id, []byte(strconv.Itoa(temperature)))
     if err != nil {
-        return nil, errors.New("Expecting integer value for asset holding")
+        return nil, err
     }
     
     return nil, nil
@@ -81,7 +81,7 @@ func (t *SimpleChaincode) Query(stub *shim.ChaincodeStub, function string, args 
     id = args[0]
     temperatureBytes, err := stub.GetState(id)
     if err != nil {
-        return nil, errors.New("Expecting integer value for asset holding")
+        return nil, err
     }
     
     if temperatureBytes == nil {
