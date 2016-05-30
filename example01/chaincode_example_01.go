@@ -64,7 +64,7 @@ func (t *ChaincodeExample01) Query(stub *shim.ChaincodeStub, function string, ar
     itemId = args[0]
     
     // Get the state from the ledger
-    itemBytes, err := stub.GetState(A)
+    itemBytes, err := stub.GetState(itemId)
     if err != nil {
         jsonResp := "{\"Error\":\"Failed to get state for " + itemId + "\"}"
         return nil, errors.New(jsonResp)
