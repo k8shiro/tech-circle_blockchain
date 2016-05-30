@@ -23,7 +23,7 @@ func (t *SimpleChaincode1) Init(stub *shim.ChaincodeStub, function string, args 
 // Transaction makes payment of X units from itemID to B
 func (t *SimpleChaincode1) Invoke(stub *shim.ChaincodeStub, function string, args []string) ([]byte, error) {
     var itemID string    // Entities
-    var item int // Asset holdings
+    var item string // Asset holdings
     var err error
     
     if len(args) != 2 {
@@ -32,14 +32,14 @@ func (t *SimpleChaincode1) Invoke(stub *shim.ChaincodeStub, function string, arg
     
     // Initialize the chaincode
     itemID = args[0]
-    item, err = strconv.Atoi(args[1])
+    item, err = args[1]
     if err != nil {
         return nil, errors.New("Expecting integer value for asset holding")
     }
     
     
     // Write the state to the ledger
-    err = stub.PutState(itemID, []byte(strconv.Itoa(item)))
+    err = stub.PutState(itemID, []byte(item))
     if err != nil {
         return nil, err
     }
