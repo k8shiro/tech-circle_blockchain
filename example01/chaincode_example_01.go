@@ -22,8 +22,8 @@ func (t *SimpleChaincode1) Init(stub *shim.ChaincodeStub, function string, args 
 
 // Transaction makes payment of X units from A to B
 func (t *SimpleChaincode1) Invoke(stub *shim.ChaincodeStub, function string, args []string) ([]byte, error) {
-    var A string    // Entities
-    var Aval int // Asset holdings
+    var itemId string    // Entities
+    var itemName string // Asset holdings
     var err error
     
     if len(args) != 2 {
@@ -31,15 +31,15 @@ func (t *SimpleChaincode1) Invoke(stub *shim.ChaincodeStub, function string, arg
     }
     
     // Initialize the chaincode
-    A = args[0]
-    Aval, err = strconv.Atoi(args[1])
+    itemId = args[0]
+    itemName = args[1]
     if err != nil {
         return nil, errors.New("Expecting integer value for asset holding")
     }
     
     
     // Write the state to the ledger
-    err = stub.PutState(A, []byte(strconv.Itoa(Aval)))
+    err = stub.PutState(itemId, []byte(itemName))
     if err != nil {
         return nil, err
     }
@@ -54,30 +54,30 @@ func (t *SimpleChaincode1) Query(stub *shim.ChaincodeStub, function string, args
     if function != "query" {
         return nil, errors.New("Invalid query function name. Expecting \"query\"")
     }
-    var A string // Entities
+    var itemId string // Entities
     var err error
     
     if len(args) != 1 {
         return nil, errors.New("Incorrect number of arguments. Expecting name of the person to query")
     }
     
-    A = args[0]
+    itemId = args[0]
     
     // Get the state from the ledger
-    Avalbytes, err := stub.GetState(A)
+    itemBytes, err := stub.GetState(A)
     if err != nil {
-        jsonResp := "{\"Error\":\"Failed to get state for " + A + "\"}"
+        jsonResp := "{\"Error\":\"Failed to get state for " + itemId + "\"}"
         return nil, errors.New(jsonResp)
     }
     
     if Avalbytes == nil {
-        jsonResp := "{\"Error\":\"Nil amount for " + A + "\"}"
+        jsonResp := "{\"Error\":\"Nil amount for " + itemId + "\"}"
         return nil, errors.New(jsonResp)
     }
     
-    jsonResp := "{\"Name\":\"" + A + "\",\"Amount\":\"" + string(Avalbytes) + "\"}"
+    jsonResp := "{\"Name\":\"" + itemId + "\",\"Amount\":\"" + string(itemBytes) + "\"}"
     fmt.Printf("Query Response:%s\n", jsonResp)
-    return Avalbytes, nil
+    return itemBytes, nil
 }
 
 func main() {
