@@ -22,51 +22,25 @@ func (t *SimpleChaincode) Init(stub *shim.ChaincodeStub, function string, args [
 
 // Transaction makes payment of X units from A to B
 func (t *SimpleChaincode) Invoke(stub *shim.ChaincodeStub, function string, args []string) ([]byte, error) {
-    var A, B string    // Entities
-    var Aval, Bval int // Asset holdings
-    var X int          // Transaction value
+    var A string    // Entities
+    var Aval int // Asset holdings
     var err error
     
-    if len(args) != 3 {
-        return nil, errors.New("Incorrect number of arguments. Expecting 3")
+    if len(args) != 2 {
+        return nil, errors.New("Incorrect number of arguments. Expecting 4")
     }
     
+    // Initialize the chaincode
     A = args[0]
-    B = args[1]
-    
-    // Get the state from the ledger
-    // TODO: will be nice to have a GetAllState call to ledger
-    Avalbytes, err := stub.GetState(A)
+    Aval, err = strconv.Atoi(args[1])
     if err != nil {
-        return nil, errors.New("Failed to get state")
+        return nil, errors.New("Expecting integer value for asset holding")
     }
-    if Avalbytes == nil {
-        return nil, errors.New("Entity not found")
-    }
-    Aval, _ = strconv.Atoi(string(Avalbytes))
     
-    Bvalbytes, err := stub.GetState(B)
-    if err != nil {
-        return nil, errors.New("Failed to get state")
-    }
-    if Bvalbytes == nil {
-        return nil, errors.New("Entity not found")
-    }
-    Bval, _ = strconv.Atoi(string(Bvalbytes))
-    
-    // Perform the execution
-    X, err = strconv.Atoi(args[2])
-    Aval = Aval - X
-    Bval = Bval + X
     fmt.Printf("Aval = %d, Bval = %d\n", Aval, Bval)
     
-    // Write the state back to the ledger
+    // Write the state to the ledger
     err = stub.PutState(A, []byte(strconv.Itoa(Aval)))
-    if err != nil {
-        return nil, err
-    }
-    
-    err = stub.PutState(B, []byte(strconv.Itoa(Bval)))
     if err != nil {
         return nil, err
     }
