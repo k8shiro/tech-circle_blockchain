@@ -86,7 +86,7 @@ func (t *SimpleChaincode) Query(stub *shim.ChaincodeStub, function string, args 
     }
     
     if temperatureBytes == nil {
-        jsonResp := id + " is Nill"
+        jsonResp := aid + " is Nill"
         return nil, errors.New(jsonResp)
     }
     
