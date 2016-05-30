@@ -15,52 +15,42 @@ import (
 type SimpleChaincode struct {
 }
 
+
 func (t *SimpleChaincode) Init(stub *shim.ChaincodeStub, function string, args []string) ([]byte, error) {
-    var A string
-    var Aval int
-    var err error
-    
-    if len(args) != 2 {
-        return nil, errors.New("Incorrect number of arguments. Expecting 4")
-    }
-    
-    A = args[0]
-    Aval, err = strconv.Atoi(args[1])
-    if err != nil {
-        return nil, errors.New("Expecting integer value for asset holding")
-    }
-    
-    fmt.Printf("Aval = %d,\n", Aval)
-    
-    err = stub.PutState(A, []byte(strconv.Itoa(Aval)))
-    if err != nil {
-        return nil, err
-    }
-    return nil, nil
-}
-
-
-
-func (t *SimpleChaincode) Invoke(stub *shim.ChaincodeStub, function string, args []string) ([]byte, error) {
-    var A string
-    var Aval int
+    var id string
+    var temperature int
     var err error
     
     if len(args) != 2 {
         return nil, errors.New("Incorrect number of arguments. Expecting 2")
     }
     
-    A = args[0]
-    Aval, err = strconv.Atoi(args[1])
-    if err != nil {
-        return nil, errors.New("Expecting integer value for asset holding")
+    id = args[0]
+    temperature, err = strconv.Atoi(args[1])
+
+    
+    fmt.Printf("temperature = %d,\n", temperature)
+    
+    err = stub.PutState(id, []byte(strconv.Itoa(temperature)))
+
+    return nil, nil
+}
+
+
+
+func (t *SimpleChaincode) Invoke(stub *shim.ChaincodeStub, function string, args []string) ([]byte, error) {
+    var id string
+    var temperature int
+    var err error
+    
+    if len(args) != 2 {
+        return nil, errors.New("Incorrect number of arguments. Expecting 2")
     }
     
+    id = args[0]
+    temperature, err = strconv.Atoi(args[1])
     
-    err = stub.PutState(A, []byte(strconv.Itoa(Aval)))
-    if err != nil {
-        return nil, err
-    }
+    err = stub.PutState(id, []byte(strconv.Itoa(temperature)))
     
     return nil, nil
 }
@@ -70,28 +60,24 @@ func (t *SimpleChaincode) Query(stub *shim.ChaincodeStub, function string, args 
     if function != "query" {
         return nil, errors.New("Invalid query function name. Expecting \"query\"")
     }
-    var A string
+    var id string
     var err error
     
     if len(args) != 1 {
         return nil, errors.New("Incorrect number of arguments. Expecting name of the person to query")
     }
     
-    A = args[0]
+    id = args[0]
     
 
-    Avalbytes, err := stub.GetState(A)
-    if err != nil {
-        jsonResp := "{\"Error\":\"Failed to get state for " + A + "\"}"
+    temperatureBytes, err := stub.GetState(id)
+    
+    if temperatureBytes == nil {
+        jsonResp := "{\"Error\":\"Nil amount for " + id + "\"}"
         return nil, errors.New(jsonResp)
     }
     
-    if Avalbytes == nil {
-        jsonResp := "{\"Error\":\"Nil amount for " + A + "\"}"
-        return nil, errors.New(jsonResp)
-    }
-    
-    message := "Name:" + A + ", Amount:" + string(Avalbytes) + "}"
+    message := "ID:" + id + ", Temperature:" + string(temperatureBytes)
     return  []byte(message), nil
 }
 
