@@ -32,10 +32,8 @@ func (t *ChaincodeEX1) Invoke(stub *shim.ChaincodeStub, function string, args []
     
     // Initialize the chaincode
     itemID = args[0]
-    item, err = args[1]
-    if err != nil {
-        return nil, errors.New("Expecting integer value for asset holding")
-    }
+    item = args[1]
+
     
     
     // Write the state to the ledger
