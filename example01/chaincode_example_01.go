@@ -32,12 +32,11 @@ func (t *ChaincodeEX1) Invoke(stub *shim.ChaincodeStub, function string, args []
     
     // Initialize the chaincode
     itemID = args[0]
-    //item = args[1]
-
+    item = string(args[1])
     
     
     // Write the state to the ledger
-    err = stub.PutState(itemID, []byte(args[1]))
+    err = stub.PutState(itemID, []byte(item))
     if err != nil {
         return nil, err
     }
