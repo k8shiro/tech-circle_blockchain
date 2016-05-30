@@ -89,8 +89,9 @@ func (t *SimpleChaincode) Query(stub *shim.ChaincodeStub, function string, args 
         return nil, errors.New(jsonResp)
     }
     
-    message := "ID:" + id + ", Temperature:" + string(temperatureBytes)
-    return  []byte(message), nil
+    //message := "ID:" + id + ", Temperature:" + string(temperatureBytes)
+    //return  []byte(message), nil
+    return temperatureBytes, nil
 }
 
 
