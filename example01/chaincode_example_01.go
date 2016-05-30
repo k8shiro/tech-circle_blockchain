@@ -71,8 +71,9 @@ func (t *SimpleChaincode) Query(stub *shim.ChaincodeStub, function string, args 
     if function != "query" {
         return nil, errors.New("Invalid query function name. Expecting \"query\"")
     }
-    var aid string
+    var id string
     var err error
+    var temperatureBytes byte
 
     
     if len(args) != 1 {
@@ -80,13 +81,13 @@ func (t *SimpleChaincode) Query(stub *shim.ChaincodeStub, function string, args 
     }
     
     id = args[0]
-    temperatureBytes, err := stub.GetState(aid)
+    temperatureBytes, err = stub.GetState(id)
     if err != nil {
         return nil, err
     }
     
     if temperatureBytes == nil {
-        jsonResp := aid + " is Nill"
+        jsonResp := id + " is Nill"
         return nil, errors.New(jsonResp)
     }
     
