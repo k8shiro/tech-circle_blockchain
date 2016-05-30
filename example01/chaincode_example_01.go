@@ -75,8 +75,6 @@ func (t *SimpleChaincode01) Query(stub *shim.ChaincodeStub, function string, arg
         return nil, errors.New(jsonResp)
     }
     
-    jsonResp := "{\"Name\":\"" + itemID + "\",\"Amount\":\"" + string(itembytes) + "\"}"
-    fmt.Printf("Query Response:%s\n", jsonResp)
     return itembytes, nil
 }
 
