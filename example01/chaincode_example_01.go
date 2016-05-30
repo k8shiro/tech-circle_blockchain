@@ -7,8 +7,10 @@ import (
         "github.com/hyperledger/fabric/core/chaincode/shim"
         )
 
+
 type SimpleChaincode struct {
 }
+
 
 func (t *SimpleChaincode) Init(stub *shim.ChaincodeStub, function string, args []string) ([]byte, error) {
     var id string
@@ -21,8 +23,6 @@ func (t *SimpleChaincode) Init(stub *shim.ChaincodeStub, function string, args [
     
     id = args[0]
     item = args[1]
-    
-    fmt.Printf("id = %d,\n", id)
     
     err = stub.PutState(id, []byte(item))
     if err != nil {
@@ -79,6 +79,7 @@ func (t *SimpleChaincode) Query(stub *shim.ChaincodeStub, function string, args 
     
     return itemBytes, nil
 }
+
 
 func main() {
     err := shim.Start(new(SimpleChaincode))
