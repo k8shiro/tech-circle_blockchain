@@ -70,7 +70,7 @@ func (t *ChaincodeExample01) Query(stub *shim.ChaincodeStub, function string, ar
         return nil, errors.New(jsonResp)
     }
     
-    if Avalbytes == nil {
+    if itemBytes == nil {
         jsonResp := "{\"Error\":\"Nil amount for " + itemId + "\"}"
         return nil, errors.New(jsonResp)
     }
