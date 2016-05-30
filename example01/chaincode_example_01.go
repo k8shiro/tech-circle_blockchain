@@ -16,7 +16,7 @@ func (t *SimpleChaincode) Init(stub *shim.ChaincodeStub, function string, args [
     var err error
     
     if len(args) != 2 {
-        return nil, errors.New("Incorrect number of arguments. Expecting 4")
+        return nil, errors.New("Incorrect number of arguments. Expecting 2")
     }
     
     id = args[0]
@@ -58,7 +58,7 @@ func (t *SimpleChaincode) Query(stub *shim.ChaincodeStub, function string, args 
     if function != "query" {
         return nil, errors.New("Invalid query function name. Expecting \"query\"")
     }
-    var id string // Entities
+    var id string
     var err error
     
     if len(args) != 1 {
@@ -67,7 +67,6 @@ func (t *SimpleChaincode) Query(stub *shim.ChaincodeStub, function string, args 
     
     id = args[0]
     
-    // Get the state from the ledger
     itemBytes, err := stub.GetState(id)
     if err != nil {
         jsonResp := "{\"Error\":\"Failed to get state for " + id + "\"}"
@@ -79,7 +78,7 @@ func (t *SimpleChaincode) Query(stub *shim.ChaincodeStub, function string, args 
         return nil, errors.New(jsonResp)
     }
     
-    jsonResp := "{\"Name\":\"" + A + "\",\"Amount\":\"" + string(itemBytes) + "\"}"
+    jsonResp := "{\"Name\":\"" + id + "\",\"Amount\":\"" + string(itemBytes) + "\"}"
     fmt.Printf("Query Response:%s\n", jsonResp)
     return itemBytes, nil
 }
