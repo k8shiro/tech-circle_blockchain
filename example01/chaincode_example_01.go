@@ -22,26 +22,17 @@ func (t *SimpleChaincode1) Init(stub *shim.ChaincodeStub, function string, args 
 
 // Transaction makes payment of X units from itemID to B
 func (t *ChaincodeEX1) Invoke(stub *shim.ChaincodeStub, function string, args []string) ([]byte, error) {
-    var itemID string    // Entities
-    
-    var err error
-    
     if len(args) != 2 {
-        return nil, errors.New("Incorrect number of arguments. Expecting 4")
+        return nil, errors.New("put operation must include two arguments, a key and value")
     }
+    key := args[0]
+    value := args[1]
     
-    // Initialize the chaincode
-    itemID = args[0]
-    item := args[1]
-    
-    
-    // Write the state to the ledger
-    err = stub.PutState(itemID, []byte(item))
+    err := stub.PutState(key, []byte(value))
     if err != nil {
-        return nil, err
+        fmt.Printf("Error putting state %s", err)
+        return nil, fmt.Errorf("put operation failed. Error updating state: %s", err)
     }
-    
-    
     return nil, nil
 }
 
