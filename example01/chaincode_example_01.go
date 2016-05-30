@@ -12,55 +12,27 @@ type SimpleChaincode struct {
 }
 
 func (t *SimpleChaincode) Init(stub *shim.ChaincodeStub, function string, args []string) ([]byte, error) {
-    var A, string    // Entities
-    var Aval int // Asset holdings
-    var err error
-    
-    if len(args) != 2 {
-        return nil, errors.New("Incorrect number of arguments. Expecting 4")
+    if len(args) != 1 {
+        return nil, errors.New("Incorrect number of arguments. Expecting 1")
     }
     
-    // Initialize the chaincode
-    A = args[0]
-    Aval, err = strconv.Atoi(args[1])
-    if err != nil {
-        return nil, errors.New("Expecting integer value for asset holding")
-    }
-
-    
-    // Write the state to the ledger
-    err = stub.PutState(A, []byte(strconv.Itoa(Aval)))
+    err := stub.PutState("hello_world", []byte(args[0]))
     if err != nil {
         return nil, err
     }
-    
     
     return nil, nil
 }
 
 func (t *SimpleChaincode) Invoke(stub *shim.ChaincodeStub, function string, args []string) ([]byte, error) {
-    var A, string    // Entities
-    var Aval int // Asset holdings
-    var err error
-    
-    if len(args) != 2 {
-        return nil, errors.New("Incorrect number of arguments. Expecting 4")
+    if len(args) != 1 {
+        return nil, errors.New("Incorrect number of arguments. Expecting 1")
     }
     
-    // Initialize the chaincode
-    A = args[0]
-    Aval, err = strconv.Atoi(args[1])
-    if err != nil {
-        return nil, errors.New("Expecting integer value for asset holding")
-    }
-    
-    
-    // Write the state to the ledger
-    err = stub.PutState(A, []byte(strconv.Itoa(Aval)))
+    err := stub.PutState("hello_world", []byte(args[0]))
     if err != nil {
         return nil, err
     }
-    
     
     return nil, nil
 }
