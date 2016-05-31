@@ -39,8 +39,14 @@ func (t *SimpleChaincode) Invoke(stub *shim.ChaincodeStub, function string, args
     key = args[0]
     value.item = args[1]
     value.position = args[2]
-    value.temperature = strconv.Atoi(args[3])
-    value.onDelivery = strconv.ParseBool(args[4])
+    value.temperature, err = strconv.Atoi(args[3])
+    if err != nil {
+        return nil, err
+    }
+    value.onDelivery, err = strconv.ParseBool(args[4])
+    if err != nil {
+        return nil, err
+    }
     valbytes, err := json.Marshal(value)
     if err != nil {
         return nil, err
