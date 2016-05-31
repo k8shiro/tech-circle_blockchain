@@ -1,116 +1,99 @@
 package main
 
 import (
-        "encoding/json"
         "errors"
         "fmt"
+        "strconv"
         
         "github.com/hyperledger/fabric/core/chaincode/shim"
         )
-
-// This chaincode implements a simple map that is stored in the state.
-// The following operations are available.
-
-// Invoke operations
-// put - requires two arguments, a key and value
-// remove - requires a key
-
-// Query operations
-// get - requires one argument, a key, and returns a value
-// keys - requires no arguments, returns all keys
 
 // SimpleChaincode example simple Chaincode implementation
 type SimpleChaincode struct {
 }
 
-func (t *SimpleChaincode) Init(stub *shim.ChaincodeStub, function string, args []string) ([]byte, error) {
-    return nil, nil
-}
-
-// Run callback representing the invocation of a chaincode
-func (t *SimpleChaincode) Invoke(stub *shim.ChaincodeStub, function string, args []string) ([]byte, error) {
-    
-    switch function {
-    case "put":
-        if len(args) < 2 {
-            return nil, errors.New("put operation must include two arguments, a key and value")
-        }
-        key := args[0]
-        value := args[1]
-        
-        err := stub.PutState(key, []byte(value))
-        if err != nil {
-            fmt.Printf("Error putting state %s", err)
-            return nil, fmt.Errorf("put operation failed. Error updating state: %s", err)
-        }
-        return nil, nil
-        
-    case "remove":
-        if len(args) < 1 {
-            return nil, errors.New("remove operation must include one argument, a key")
-        }
-        key := args[0]
-        
-        err := stub.DelState(key)
-        if err != nil {
-            return nil, fmt.Errorf("remove operation failed. Error updating state: %s", err)
-        }
-        return nil, nil
-        
-    default:
-        return nil, errors.New("Unsupported operation")
-    }
-}
-
-// Query callback representing the query of a chaincode
-func (t *SimpleChaincode) Query(stub *shim.ChaincodeStub, function string, args []string) ([]byte, error) {
-    
-    switch function {
-        
-    case "get":
-        if len(args) < 1 {
-            return nil, errors.New("get operation must include one argument, a key")
-        }
-        key := args[0]
-        value, err := stub.GetState(key)
-        if err != nil {
-            return nil, fmt.Errorf("get operation failed. Error accessing state: %s", err)
-        }
-        return value, nil
-        
-    case "keys":
-        
-        keysIter, err := stub.RangeQueryState("", "")
-        if err != nil {
-            return nil, fmt.Errorf("keys operation failed. Error accessing state: %s", err)
-        }
-        defer keysIter.Close()
-        
-        var keys []string
-        for keysIter.HasNext() {
-            key, _, err := keysIter.Next()
-            if err != nil {
-                return nil, fmt.Errorf("keys operation failed. Error accessing state: %s", err)
-            }
-            keys = append(keys, key)
-        }
-        
-        jsonKeys, err := json.Marshal(keys)
-        if err != nil {
-            return nil, fmt.Errorf("keys operation failed. Error marshaling JSON: %s", err)
-        }
-        
-        return jsonKeys, nil
-        
-    default:
-        return nil, errors.New("Unsupported operation")
-    }
-}
 
 func main() {
     err := shim.Start(new(SimpleChaincode))
     if err != nil {
-        fmt.Printf("Error starting chaincode: %s", err)
+        fmt.Printf("Error starting Simple chaincode: %s", err)
     }
 }
-Status API Training Shop Blog About
+
+func (t *SimpleChaincode) Init(stub *shim.ChaincodeStub, function string, args []string) ([]byte, error) {
+    if len(args) != 1 {
+        return nil, errors.New("Incorrect number of arguments. Expecting 1")
+    }
+    
+    err := stub.PutState("hello_world", []byte(args[0]))
+    if err != nil {
+        return nil, err
+    }
+    
+    return nil, nil
+}
+
+
+func (t *SimpleChaincode) Invoke(stub *shim.ChaincodeStub, function string, args []string) ([]byte, error) {
+    fmt.Println("invoke is running " + function)
+    
+    // Handle different functions
+    if function == "init" {
+        return t.Init(stub, "init", args)
+    } else if function == "write" {
+        return t.write(stub, args)
+    }
+    fmt.Println("invoke did not find func: " + function)
+    
+    return nil, errors.New("Received unknown function invocation")
+}
+
+func (t *SimpleChaincode) write(stub *shim.ChaincodeStub, args []string) ([]byte, error) {
+    var name, value string
+    var err error
+    fmt.Println("running write()")
+    
+    if len(args) != 2 {
+        return nil, errors.New("Incorrect number of arguments. Expecting 2. name of the variable and value to set")
+    }
+    
+    name = args[0]                            //rename for fun
+    value = args[1]
+    err = stub.PutState(name, []byte(value))  //write the variable into the chaincode state
+    if err != nil {
+        return nil, err
+    }
+    return nil, nil
+}
+
+
+func (t *SimpleChaincode) Query(stub *shim.ChaincodeStub, function string, args []string) ([]byte, error) {
+    fmt.Println("query is running " + function)
+    
+    // Handle different functions
+    if function == "read" {                            //read a variable
+        return t.read(stub, args)
+    }
+    fmt.Println("query did not find func: " + function)
+    
+    return nil, errors.New("Received unknown function query")
+}
+
+
+func (t *SimpleChaincode) read(stub *shim.ChaincodeStub, args []string) ([]byte, error) {
+    var name, jsonResp string
+    var err error
+    
+    if len(args) != 1 {
+        return nil, errors.New("Incorrect number of arguments. Expecting name of the var to query")
+    }
+    
+    name = args[0]
+    valAsbytes, err := stub.GetState(name)
+    if err != nil {
+        jsonResp = "{\"Error\":\"Failed to get state for " + name + "\"}"
+        return nil, errors.New(jsonResp)
+    }
+    
+    return valAsbytes, nil
+}
