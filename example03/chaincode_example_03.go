@@ -90,7 +90,15 @@ func (t *ChaincodeEX3) Query(stub *shim.ChaincodeStub, function string, args []s
         return nil, errors.New("Error")
     }
     
-    message := "{item:" + value.Item + ", position:" + value.Position + ", temperature:" + strconv.Atoi(value.Temperature) + "}"
+    item := value.Item
+    position := value.Position
+    temperature, err := strconv.Atoi(value.Temperature)
+    err = json.Unmarshal(valbytes, &value)
+    if err != nil {
+        return nil, errors.New("Error")
+    }
+    
+    message := "{item:" + item + ", position:" + position + ", temperature:" + temperature + "}"
     return []byte(message), nil
 }
 
