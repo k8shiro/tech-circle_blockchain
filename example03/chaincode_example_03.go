@@ -15,7 +15,6 @@ type Baggage struct {
     item string
     position string
     temperature int
-    onDelivery bool
 }
 
 
@@ -32,7 +31,7 @@ func (t *SimpleChaincode) Invoke(stub *shim.ChaincodeStub, function string, args
     var value Baggage
     var err error
     
-    if len(args) != 5 {
+    if len(args) != 4 {
         return nil, errors.New("Incorrect number of arguments. Expecting 5")
     }
     
@@ -43,10 +42,7 @@ func (t *SimpleChaincode) Invoke(stub *shim.ChaincodeStub, function string, args
     if err != nil {
         return nil, err
     }
-    value.onDelivery, err = strconv.ParseBool(args[4])
-    if err != nil {
-        return nil, err
-    }
+
     valbytes, err := json.Marshal(value)
     if err != nil {
         return nil, err
