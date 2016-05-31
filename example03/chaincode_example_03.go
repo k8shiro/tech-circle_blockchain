@@ -90,7 +90,7 @@ func (t *SimpleChaincode) Query(stub *shim.ChaincodeStub, function string, args 
         return nil, errors.New("Error")
     }
     
-    message := "{item:" + value.item + "}"
+    message := "{item:" + value.Item + "}"
     return []byte(message), nil
 }
 
