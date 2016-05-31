@@ -30,9 +30,10 @@ func (t *SimpleChaincode) Invoke(stub *shim.ChaincodeStub, function string, args
     
     key = args[0]
     value = args[1]
+    valbyte = []byte(value)
     
     
-    err = stub.PutState(key, []byte(value))
+    err = stub.PutState(key, valbyte)
     if err != nil {
         return nil, err
     }
