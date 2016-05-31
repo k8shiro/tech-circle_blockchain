@@ -42,7 +42,7 @@ func (t *SimpleChaincode) Invoke(stub *shim.ChaincodeStub, function string, args
         return nil, err
     }
     
-    value := Baggage{item: item, position: position, temperature: temperature}
+    value := Baggage{item, position, temperature}
 
     valbytes, err := json.Marshal(value)
     if err != nil {
@@ -50,7 +50,7 @@ func (t *SimpleChaincode) Invoke(stub *shim.ChaincodeStub, function string, args
     }
     
     
-    err = stub.PutState(key, []byte(string(valbytes)))
+    err = stub.PutState(key, valbytes)
     if err != nil {
         return nil, err
     }
