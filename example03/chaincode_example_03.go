@@ -93,7 +93,6 @@ func (t *ChaincodeEX3) Query(stub *shim.ChaincodeStub, function string, args []s
     item := value.Item
     position := value.Position
     temperature, err := strconv.Atoi(value.Temperature)
-    err = json.Unmarshal(valbytes, &value)
     if err != nil {
         return nil, errors.New("Error")
     }
