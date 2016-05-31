@@ -35,7 +35,7 @@ func (t *SimpleChaincode) Invoke(stub *shim.ChaincodeStub, function string, args
         return nil, errors.New("Incorrect number of arguments. Expecting 5")
     }
     
-    key := args[0]
+    key = args[0]
     item := args[1]
     position := args[2]
     temperature, err := strconv.Atoi(args[3])
@@ -92,7 +92,7 @@ func (t *SimpleChaincode) Query(stub *shim.ChaincodeStub, function string, args 
     }
     
     message := "item:" + value.item
-    return byte[](message), nil
+    return []byte(message), nil
 }
 
 func main() {
