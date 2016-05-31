@@ -35,13 +35,15 @@ func (t *SimpleChaincode) Invoke(stub *shim.ChaincodeStub, function string, args
         return nil, errors.New("Incorrect number of arguments. Expecting 5")
     }
     
-    key = args[0]
-    value.item = args[1]
-    value.position = args[2]
-    value.temperature, err = strconv.Atoi(args[3])
+    key := args[0]
+    item := args[1]
+    position := args[2]
+    temperature, err := strconv.Atoi(args[3])
     if err != nil {
         return nil, err
     }
+    
+    value = Baggage{item, position, temperature}
 
     valbytes, err := json.Marshal(value)
     if err != nil {
