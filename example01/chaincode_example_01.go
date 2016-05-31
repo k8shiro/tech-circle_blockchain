@@ -1,11 +1,5 @@
 package main
 
-//WARNING - this chaincode's ID is hard-coded in chaincode_example04 to illustrate one way of
-//calling chaincode from a chaincode. If this example is modified, chaincode_example04.go has
-//to be modified as well with the new ID of chaincode_example02.
-//chaincode_example05 show's how chaincode ID can be passed in as a parameter instead of
-//hard-coding.
-
 import (
         "errors"
         "fmt"
@@ -15,101 +9,48 @@ import (
         )
 
 // SimpleChaincode example simple Chaincode implementation
-type SimpleChaincode struct {
+type SimpleChaincode1 struct {
 }
 
-func (t *SimpleChaincode) Init(stub *shim.ChaincodeStub, function string, args []string) ([]byte, error) {
-    var A, B string    // Entities
-    var Aval, Bval string // Asset holdings
-    var err error
-    
-    if len(args) != 4 {
-        return nil, errors.New("Incorrect number of arguments. Expecting 4")
-    }
-    
-    // Initialize the chaincode
-    A = args[0]
-    Aval= args[1]
-    if err != nil {
-        return nil, errors.New("Expecting integer value for asset holding")
-    }
-    B = args[2]
-    Bval = args[3]
-    if err != nil {
-        return nil, errors.New("Expecting integer value for asset holding")
-    }
-
-    
-    // Write the state to the ledger
-    err = stub.PutState(A, []byte(Aval))
-    if err != nil {
-        return nil, err
-    }
-    
-    err = stub.PutState(B, []byte(Bval))
-    if err != nil {
-        return nil, err
+func (t *SimpleChaincode1) Init(stub *shim.ChaincodeStub, function string, args []string) ([]byte, error) {
+    if len(args) != 0 {
+        return nil, errors.New("Incorrect number of arguments. Expecting 0")
     }
     
     return nil, nil
 }
 
 // Transaction makes payment of X units from A to B
-func (t *SimpleChaincode) Invoke(stub *shim.ChaincodeStub, function string, args []string) ([]byte, error) {
-    var A, B string    // Entities
-    var Aval, Bval string // Asset holdings
+func (t *SimpleChaincode1) Invoke(stub *shim.ChaincodeStub, function string, args []string) ([]byte, error) {
+    var A string    // Entities
+    var Aval int // Asset holdings
     var err error
     
-    if len(args) != 4 {
+    if len(args) != 2 {
         return nil, errors.New("Incorrect number of arguments. Expecting 4")
     }
     
     // Initialize the chaincode
     A = args[0]
-    Aval= args[1]
-    if err != nil {
-        return nil, errors.New("Expecting integer value for asset holding")
-    }
-    B = args[2]
-    Bval = args[3]
+    Aval, err = strconv.Atoi(args[1])
     if err != nil {
         return nil, errors.New("Expecting integer value for asset holding")
     }
     
     
     // Write the state to the ledger
-    err = stub.PutState(A, []byte(Aval))
+    err = stub.PutState(A, []byte(strconv.Itoa(Aval)))
     if err != nil {
         return nil, err
     }
     
-    err = stub.PutState(B, []byte(Bval))
-    if err != nil {
-        return nil, err
-    }
     
     return nil, nil
 }
 
-// Deletes an entity from state
-func (t *SimpleChaincode) delete(stub *shim.ChaincodeStub, args []string) ([]byte, error) {
-    if len(args) != 1 {
-        return nil, errors.New("Incorrect number of arguments. Expecting 1")
-    }
-    
-    A := args[0]
-    
-    // Delete the key from the state in ledger
-    err := stub.DelState(A)
-    if err != nil {
-        return nil, errors.New("Failed to delete state")
-    }
-    
-    return nil, nil
-}
 
 // Query callback representing the query of a chaincode
-func (t *SimpleChaincode) Query(stub *shim.ChaincodeStub, function string, args []string) ([]byte, error) {
+func (t *SimpleChaincode1) Query(stub *shim.ChaincodeStub, function string, args []string) ([]byte, error) {
     if function != "query" {
         return nil, errors.New("Invalid query function name. Expecting \"query\"")
     }
@@ -140,8 +81,10 @@ func (t *SimpleChaincode) Query(stub *shim.ChaincodeStub, function string, args 
 }
 
 func main() {
-    err := shim.Start(new(SimpleChaincode))
+    err := shim.Start(new(SimpleChaincode1))
     if err != nil {
         fmt.Printf("Error starting Simple chaincode: %s", err)
     }
 }
+
+
