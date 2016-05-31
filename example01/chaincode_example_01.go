@@ -69,7 +69,7 @@ func (t *SimpleChaincode) Query(stub *shim.ChaincodeStub, function string, args 
         return nil, errors.New(jsonResp)
     }
     
-    jsonResp := "{\"Name\":\"" + A + "\",\"Amount\":\"" + string(valbytes) + "\"}"
+    jsonResp := "{\"Name\":\"" + key + "\",\"Amount\":\"" + string(valbytes) + "\"}"
     fmt.Printf("Query Response:%s\n", jsonResp)
     return valbytes, nil
 }
