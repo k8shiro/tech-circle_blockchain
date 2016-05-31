@@ -19,7 +19,7 @@ func (t *SimpleChaincode) Init(stub *shim.ChaincodeStub, function string, args [
     return nil, nil
 }
 
-func (t *SimpleChaincode1) Invoke(stub *shim.ChaincodeStub, function string, args []string) ([]byte, error) {
+func (t *SimpleChaincode) Invoke(stub *shim.ChaincodeStub, function string, args []string) ([]byte, error) {
     var key string
     var value int
     var err error
