@@ -8,7 +8,7 @@ import (
         "github.com/hyperledger/fabric/core/chaincode/shim"
         )
 
-type SimpleChaincode struct {
+type ChaincodeEX3 struct {
 }
 
 type Baggage struct {
@@ -18,7 +18,7 @@ type Baggage struct {
 }
 
 
-func (t *SimpleChaincode) Init(stub *shim.ChaincodeStub, function string, args []string) ([]byte, error) {
+func (t *ChaincodeEX3) Init(stub *shim.ChaincodeStub, function string, args []string) ([]byte, error) {
     if len(args) != 0 {
         return nil, errors.New("Incorrect number of arguments. Expecting 0")
     }
@@ -26,7 +26,7 @@ func (t *SimpleChaincode) Init(stub *shim.ChaincodeStub, function string, args [
     return nil, nil
 }
 
-func (t *SimpleChaincode) Invoke(stub *shim.ChaincodeStub, function string, args []string) ([]byte, error) {
+func (t *ChaincodeEX3) Invoke(stub *shim.ChaincodeStub, function string, args []string) ([]byte, error) {
     var key string
     var err error
     
@@ -60,7 +60,7 @@ func (t *SimpleChaincode) Invoke(stub *shim.ChaincodeStub, function string, args
 }
 
 
-func (t *SimpleChaincode) Query(stub *shim.ChaincodeStub, function string, args []string) ([]byte, error) {
+func (t *ChaincodeEX3) Query(stub *shim.ChaincodeStub, function string, args []string) ([]byte, error) {
     if function != "query" {
         return nil, errors.New("Invalid query function name. Expecting \"query\"")
     }
@@ -95,7 +95,7 @@ func (t *SimpleChaincode) Query(stub *shim.ChaincodeStub, function string, args 
 }
 
 func main() {
-    err := shim.Start(new(SimpleChaincode))
+    err := shim.Start(new(ChaincodeEX3))
     if err != nil {
         fmt.Printf("Error starting Simple chaincode: %s", err)
     }
