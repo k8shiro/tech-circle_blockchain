@@ -8,7 +8,7 @@ import (
         "github.com/hyperledger/fabric/core/chaincode/shim"
         )
 
-type SimpleChaincode1 struct {
+type SimpleChaincode struct {
 }
 
 func (t *SimpleChaincode) Init(stub *shim.ChaincodeStub, function string, args []string) ([]byte, error) {
