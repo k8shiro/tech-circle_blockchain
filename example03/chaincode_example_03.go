@@ -89,6 +89,9 @@ func (t *SimpleChaincode) Query(stub *shim.ChaincodeStub, function string, args 
     }
     
     err = json.Unmarshal(valbytes, &value)
+    if err != nil {
+        return nil, err
+    }
     
     jsonResp := "{\"Name\":\"" + key + "\",\"Amount\":\"" + string(valbytes) + "\"}"
     fmt.Printf("Query Response:%s\n", jsonResp)
