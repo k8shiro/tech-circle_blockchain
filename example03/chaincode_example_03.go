@@ -95,7 +95,7 @@ func (t *SimpleChaincode) Query(stub *shim.ChaincodeStub, function string, args 
     
     jsonResp := "{\"Name\":\"" + key + "\",\"Amount\":\"" + string(valbytes) + "\"}"
     fmt.Printf("Query Response:%s\n", jsonResp)
-    return valbytes, nil
+    return []byte(value.item), nil
 }
 
 func main() {
