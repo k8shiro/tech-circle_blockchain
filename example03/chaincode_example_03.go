@@ -83,12 +83,12 @@ func (t *SimpleChaincode) Query(stub *shim.ChaincodeStub, function string, args 
         jsonResp := "{\"Error\":\"Nil amount for " + key + "\"}"
         return nil, errors.New(jsonResp)
     }
-    
+    /*
     err = json.Unmarshal(valbytes, &value)
     if err != nil {
         return nil, errors.New("Error")
     }
-    
+    */
     return valbytes, nil
 }
 
