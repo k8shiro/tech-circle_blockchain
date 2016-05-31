@@ -91,7 +91,22 @@ func (t *SimpleChaincode) Invoke(stub *shim.ChaincodeStub, function string, args
     return nil, nil
 }
 
-
+// Deletes an entity from state
+func (t *SimpleChaincode) delete(stub *shim.ChaincodeStub, args []string) ([]byte, error) {
+    if len(args) != 1 {
+        return nil, errors.New("Incorrect number of arguments. Expecting 1")
+    }
+    
+    A := args[0]
+    
+    // Delete the key from the state in ledger
+    err := stub.DelState(A)
+    if err != nil {
+        return nil, errors.New("Failed to delete state")
+    }
+    
+    return nil, nil
+}
 
 // Query callback representing the query of a chaincode
 func (t *SimpleChaincode) Query(stub *shim.ChaincodeStub, function string, args []string) ([]byte, error) {
