@@ -92,7 +92,7 @@ func (t *ChaincodeEX3) Query(stub *shim.ChaincodeStub, function string, args []s
     
     item := value.Item
     position := value.Position
-    temperature, err := strconv.Itoa(value.Temperature)
+    temperature := strconv.Itoa(value.Temperature)
     if err != nil {
         return nil, errors.New("Error")
     }
