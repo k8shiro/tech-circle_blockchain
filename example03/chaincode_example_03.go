@@ -3,6 +3,7 @@ package main
 import (
         "errors"
         "fmt"
+        "strconv"
         "encoding/json"
         "github.com/hyperledger/fabric/core/chaincode/shim"
         )
@@ -38,10 +39,12 @@ func (t *SimpleChaincode) Invoke(stub *shim.ChaincodeStub, function string, args
     key = args[0]
     value.item = args[1]
     value.position = args[2]
-    value.temperature = args[3]
-    value.onDelivery = args[4]
+    value.temperature = strconv.Atoi(args[3])
+    value.onDelivery = strconv.ParseBool(args[4])
     valbytes, err := json.Marshal(value)
-
+    if err != nil {
+        return nil, err
+    }
     
     
     err = stub.PutState(key, valbyte)
