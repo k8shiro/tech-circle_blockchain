@@ -90,7 +90,7 @@ func (t *ChaincodeEX3) Query(stub *shim.ChaincodeStub, function string, args []s
         return nil, errors.New("Error")
     }
     
-    message := "{item:" + value.Item + "}"
+    message := "{item:" + value.Item + "position:" + value.Position + "temperature:" + value.Temperature + "}"
     return []byte(message), nil
 }
 
