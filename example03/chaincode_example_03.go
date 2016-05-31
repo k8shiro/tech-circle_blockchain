@@ -31,7 +31,7 @@ func (t *SimpleChaincode) Invoke(stub *shim.ChaincodeStub, function string, args
     var err error
     
     if len(args) != 4 {
-        return nil, errors.New("Incorrect number of arguments. Expecting 5")
+        return nil, errors.New("Incorrect number of arguments. Expecting 4")
     }
     
     key = args[0]
@@ -91,7 +91,7 @@ func (t *SimpleChaincode) Query(stub *shim.ChaincodeStub, function string, args 
     }
     
     message := "{item:" + value.item + "}"
-    return []byte(message), nil
+    return valbytes, nil
 }
 
 func main() {
