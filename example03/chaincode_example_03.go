@@ -85,7 +85,13 @@ func (t *SimpleChaincode) Query(stub *shim.ChaincodeStub, function string, args 
         return nil, errors.New(jsonResp)
     }
     
-    return valbytes, nil
+    err = json.Unmarshal(valbytes, &value)
+    if err != nil {
+        return nil, errors.New("Error")
+    }
+    
+    message := "{item:" + value.item + "}"
+    return []byte(message), nil
 }
 
 func main() {
