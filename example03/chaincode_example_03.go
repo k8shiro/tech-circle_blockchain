@@ -53,7 +53,7 @@ func (t *SimpleChaincode) Invoke(stub *shim.ChaincodeStub, function string, args
     }
     
     
-    err = stub.PutState(key, valbyte)
+    err = stub.PutState(key, valbytes)
     if err != nil {
         return nil, err
     }
