@@ -12,9 +12,9 @@ type SimpleChaincode struct {
 }
 
 type Baggage struct {
-    item string
-    position string
-    temperature int
+    Item string
+    Position string
+    Temperature int
 }
 
 
