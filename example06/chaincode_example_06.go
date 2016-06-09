@@ -1,5 +1,8 @@
 package main
-
+/*
+ テスト中
+ 
+ */
 import (
         "errors"
         "fmt"
