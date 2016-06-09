@@ -15,7 +15,7 @@ type SimpleChaincode struct {
 var myLogger = logging.MustGetLogger("asset_mgm")
 
 func (t *SimpleChaincode) Init(stub *shim.ChaincodeStub, function string, args []string) ([]byte, error) {
-    fmt.Fprintf(rw, "{\"Error\": \"ssssssss\"}")
+    fmt.printf("{\"Error\": \"ssssssss\"}")
     
     if len(args) != 0 {
         return nil, errors.New("Incorrect number of arguments. Expecting 0")
