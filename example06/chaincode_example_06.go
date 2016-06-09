@@ -6,9 +6,8 @@ package main
 import (
         "errors"
         "fmt"
-        
+        "log"
         "github.com/hyperledger/fabric/core/chaincode/shim"
-        "github.com/op/go-logging"
         )
 
 type SimpleChaincode struct {
@@ -17,7 +16,7 @@ type SimpleChaincode struct {
 var myLogger = logging.MustGetLogger("asset_mgm")
 
 func (t *SimpleChaincode) Init(stub *shim.ChaincodeStub, function string, args []string) ([]byte, error) {
-    myLogger.Error("[AssetManagementChaincode] Init")
+    log.Println("Log!!")
     
     if len(args) != 0 {
         return nil, errors.New("Incorrect number of arguments. Expecting 0")
