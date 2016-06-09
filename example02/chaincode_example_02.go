@@ -12,7 +12,8 @@ type SimpleChaincode struct {
 
 func (t *SimpleChaincode) Init(stub *shim.ChaincodeStub, function string, args []string) ([]byte, error) {
     if len(args) != 0 {
-        return []byte("Error"), errors.New("Incorrect number of arguments. Expecting 0")
+        fmt.Println("Error: Incorrect number of arguments. Expecting 0")
+        return nil, errors.New("Incorrect number of arguments. Expecting 0")
     }
     
     return nil, nil
